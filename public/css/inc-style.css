@@ -1,0 +1,49 @@
+img {
+border: 0px;
+}
+td {
+font-size: 12px;
+font-family: Georgia, Verdana;
+}
+body {
+font-size: 12px;
+background-color: #FFFAF0;
+font-family: Georgia, Verdana;
+margin: 5px; 
+color: #444444;
+cursor: default;
+scrollbar-base-color: #D2B48C;
+background-image: url(../img/bg.gif);
+}
+input, select, textarea {
+font-family: Georgia, Verdana;
+font-size: 12px;
+border: 1px solid #8B4513;
+background-color: #D2B48C;
+color: #000000;
+}
+input, select {
+	height: 35px;
+}
+a.menu {
+color: #ffdead;
+text-decoration: none;
+font-weight: normal;
+}
+a:hover.menu {
+color: #F5F5DC;
+text-decoration: none;
+font-weight: normal;
+}
+a {
+color: #8B4513;
+text-decoration: none;
+font-weight: normal;
+}
+a:hover {
+color: #000000;
+font-weight: normal;
+}
+hr {
+border: 1px dashed #8B4513;
+}

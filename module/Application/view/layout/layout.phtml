@@ -1,0 +1,227 @@
+
+<?= $this->doctype() ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <?= $this->headTitle('Онлайн игра КРЕПОСТЬ')->setSeparator(' :: ')->setAutoEscape(false) ?>
+
+        <?=
+                $this->headMeta()
+                ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+                ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <!-- Le styles -->
+        <?=
+                $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/C__fakepath.png'])
+                ->prependStylesheet($this->basePath('css/style.css'))
+                ->prependStylesheet($this->basePath('css/inc-style.css'))
+                ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
+                ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
+        ?>
+
+        <!-- Scripts -->
+        <?=
+                $this->headScript()
+                ->prependFile($this->basePath('js/bootstrap.min.js'))
+                ->prependFile($this->basePath('js/jCanvas.js'))
+                ->prependFile($this->basePath('js/jquery.js'))
+                ->prependFile($this->basePath('js/moment.js'))
+                ->prependFile($this->basePath('js/timeonsite.js'))
+        ?>
+
+
+    </head> <body onload="startTime()"> <p id="txt"> </p> 
+
+
+        <div id="myModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header"><button class="close" type="button" data-dismiss="modal">×</button>
+                        <h4 class="modal-title">Начало турнира</h4>
+                    </div>
+                    <div class="modal-body">Текст уведомления</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" type="button" data-dismiss="modal">Закрыть</button>
+                        <a href="<?= $this->url('buttle', ['action' => 'index']) ?>"><button class="btn btn-primary gotoTournament" type="button">Начать турнир</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </body>
+
+
+
+    <body>
+        <div style="text-align: center; margin-top: -60px">
+            <img src="<?= $this->basePath('img/11.png') ?>" height="142" alt="Онлайн игра::Крепость ::">
+        </div>
+        <?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
+        <?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
+        <?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>
+        <div class="container">
+            <!--            <div class="row">
+                             Page header 
+                            <div class="col-md-4">
+                                <img src="<?= $this->basePath('img/C__fakepath.png') ?>" height="28"/>&nbsp;Онлайн игра::Крепость
+                            </div>                
+                        </div>-->
+            <div class="row">
+                <!--                <div class="col-md-12">
+                                     Navigation bar 
+                                    
+                                </div>-->
+                <?php
+                // Check if the activeMenuItemId passed to layout view model
+                // and if so, use it for setting active navbar item.
+                if (isset($activeMenuItemId)) {
+                    $this->mainMenu()->setActiveItemId($activeMenuItemId);
+                }
+
+                // Render the navbar
+                echo $this->mainMenu()->render();
+                ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Breadcrumbs -->
+                <?= $this->pageBreadcrumbs()->render(); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Page content placeholder -->
+                <?= $this->content; ?>
+            </div>
+        </div>
+        <div id="status"></div>
+    </div>
+    <?= $this->inlineScript() ?>
+</body>
+</html>
+<script>
+    window.onload = function () {
+        var socket = new WebSocket("ws://echo.websocket.org");
+        var status = document.querySelector("#status");
+//открытие соединения
+        socket.onopen = function (e) {
+            status.innerHTML = "соединение установлено";
+
+        }
+        //закрытие соединения
+        socket.onclose = function (e) {
+            if (e.wasClean){
+                status.innerHTML = "соединение закрыто";
+            }else{
+                status.innerHTML = "соединение как-то закрыто";
+            }
+            status.innerHTML += "<br>код: " + e.cod + "причина: " + e.reason;
+        }
+        // получение данных
+        socket.onmessage = function (e) {
+            
+
+
+        }
+        //возникновение ошибки
+        socket.onerror = function (e) {
+
+
+        }
+
+
+    }
+
+
+
+
+
+    //var timetour = '2018-09-08 23:43:00';
+//$('#myModal').modal("show");
+    //timer(timetour);
+    getTimeTournament();
+    function func(code, time) {
+        //console.log("code", code);
+        console.log("time", time);
+        //alert("В БОЙ!!!!");
+        $('#myModal').modal("show");
+        $('.gotoTournament').click(function () {
+            //alert('HELLO');
+            $('#myModal').modal('hide');
+            $.post('/tournament/listusers', {time: time},
+                    );
+        });
+        //getTimeTournament();
+    }
+
+    function getTimeTournament() {
+        $.post('/tournament/startoftournament', {},
+                function (data) {
+                    //console.log("data.timetour2", data.code.timetour);
+                    if (data.code.timetour) {
+                        //console.log("data.timetour", data.code.timetour);
+                        timer(data.code);
+                    }
+                    //console.log("data", data);
+
+                });
+    }
+    function compareNumeric(a, b) {
+        if (a > b)
+            return 1;
+        if (a < b)
+            return -1;
+    }
+
+    function timer(code) {
+        var gameTour;
+        var massTime = [];
+        //console.log("code", code);
+        var tmNow = new Date();
+        //timetour.sort(compareNumeric);
+        //console.log("timetour2", code);
+        for (var i = 0; i < code.timetour.length; i++) {
+            var tmTour = new Date(code.timetour[i]);
+            var idTour;
+            if (tmNow.getMonth() + 1 === tmTour.getMonth() + 1) {
+                if (tmNow.getDate() === tmTour.getDate()) {
+                    if (tmNow.getHours() === tmTour.getHours()) {
+                        gameTour = tmTour.getMinutes() - tmNow.getMinutes();
+                        idTour = code.idtour[i];
+                        massTime.push(gameTour);
+                        massTime.sort(compareNumeric);
+                        //console.log("massTime", massTime);
+                        if (massTime[0] <= 2 && massTime[0] > 0) {
+                            //gameTour = gameTour * 60 * 1000;
+                            //console.log("gameTour", massTime[0] * 60 * 1000);
+                            setTimeout(func(code, code.timetour[i]), massTime[0]);
+                            massTime.shift();
+                        } else if (massTime[0] > 2) {
+                            massTime[0] = massTime[0] - 2;
+                            setTimeout(getTimeTournament, massTime[0] * 60 * 1000);
+                        }
+
+                    } else {
+
+                    }
+                } else {
+
+                }
+            } else {
+
+            }
+        }
+
+
+
+    }
+
+
+
+
+</script>
