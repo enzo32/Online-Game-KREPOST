@@ -1,0 +1,112 @@
+<script type="text/javascript" src="/js/js/match3-example.js?time=<?php echo time(); ?>"></script>
+<script type="text/javascript" src="/js/attack.js?time=<?php echo time(); ?>"></script>
+<script type="text/javascript" src="/js/blockUI.js?time=<?php echo time(); ?>"></script>
+<?php
+$userWarriors = $this->userWarriors;
+$Userscrollsofmagic = $this->Userscrollsofmagic;
+$warriors = $this->warriors;
+$listbuttle = $this->listbuttle;
+//var_dump($listbuttle);
+//echo '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!';
+//var_dump($warriors);
+//exit();
+?>
+<div>
+    <p>Турнир №: <?= $listbuttle[0]['idtournament']?></p>
+    <p>Призовой фонд: <?= $listbuttle[0]['prize']?></p>
+    <p>Количество побед в данном турнире: <?= $listbuttle[0]['woninbuttle']?></p>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-2" id="player1">
+            <h2>Герой 1</h2>
+            <ul class="nav nav-tabs">
+                <li class="active" style="width: 25%"><a data-toggle="tab" href="#warriors_0" style="text-align: center"><b>1</b></a></li>
+                <li style="width: 25%"><a data-toggle="tab" href="#warriors_1" style="text-align: center"><b>2</b></a></li>
+                <li style="width: 25%"><a data-toggle="tab" href="#warriors_2" style="text-align: center"><b>3</b></a></li>
+                <li style="width: 25%"><a data-toggle="tab" href="#warriors_3" style="text-align: center"><b>4</b></a></li>
+            </ul>
+            <div class="tab-content">
+                <?php
+                $z = 0;
+                $flag = 0;
+                for ($i = 0; $i < count($warriors); $i++) {
+                    if ($warriors[$i]['idwarriors'] === $userWarriors[$z]['id_warriors']) {
+                        if ($flag === 0) {
+                            ?>
+                            <div id="warriors_<?= $z ?>" class="tab-pane fade in active">
+                                <h5 style="text-align: center"><?= $warriors[$i]['namewarriors'] ?></h5>
+                                <img src="<?= $warriors[$i]['imgwarriors'] ?>">
+                                <h5>Атака: <input class="attackPlayer1" value="<?= $warriors[$i]['attackwarriors'] ?>"></h5>
+                                <h5>Защита: <input class="defancePlayer1" value="<?= $warriors[$i]['deffencewarriors'] ?>"></h5>
+                                <h5>Жизнь: <input class="lifePlayer1" value="<?= $warriors[$i]['hplifewarriors'] ?>"></h5>
+                                <h5>Количество: <input class="countPlayer1" value="<?= $userWarriors[$z]['count_warriors'] ?>"> </h5>
+
+                            </div>
+                            <?php
+                            $z++;
+                            $flag++;
+                        } else {
+                            ?>
+                            <div id="warriors_<?= $z ?>" class="tab-pane fade">
+                                <h5 style="text-align: center"><?= $warriors[$i]['namewarriors'] ?></h5>
+                                <img src="<?= $warriors[$i]['imgwarriors'] ?>">
+                                <h5>Атака: <input class="attackPlayer1" value="<?= $warriors[$i]['attackwarriors'] ?>"></h5>
+                                <h5>Защита: <input class="defancePlayer1" value="<?= $warriors[$i]['deffencewarriors'] ?>"></h5>
+                                <h5>Жизнь: <input class="lifePlayer1" value="<?= $warriors[$i]['hplifewarriors'] ?>" ></h5>
+                                <h5>Количество: <input class="countPlayer1" value="<?= $userWarriors[$z]['count_warriors'] ?>"> </h5>
+
+                            </div>
+                            <?php
+                            $z++;
+                        }
+                    }
+                }
+                ?>
+
+
+
+            </div>
+            <h3>Защита</h3><input id="defancePlayer1" value="1" size="5">
+            <h5>Магия земли:</h5><input style="text-align: center; width: 20px; height: 20px;" disabled="" value="0" id="greenmanna">
+            <button id="greenbutP1">EARTH</button>
+            <h5>Магия воды:</h5><input style="text-align: center; width: 20px; height: 20px;" disabled="" value="0" id="blumanna">
+            <button id="bluebutP1">Water</button>
+            <h5>Магия огня:</h5><input style="text-align: center; width: 20px; height: 20px;" disabled="" value="0" id="redmanna">
+            <button id="redbutP1">FIRE</button>
+            <h5>Магия воздуха:</h5><input style="text-align: center; width: 20px; height: 20px;" disabled="" value="0" id="whitemanna">
+            <button id="whitebutP1">AIR</button>
+            <h5>Магия астрала:</h5><input style="text-align: center; width: 20px; height: 20px;" disabled="" value="0" id="astralmanna">
+            <button id="astralbutP1">ASTRAL</button>
+            <h5>Магия смерти:</h5><input style="text-align: center; width: 20px; height: 20px;" disabled="" value="0" id="deathmanna">
+            <button id="deathbutP1">DEATH</button>
+
+
+        </div>
+        <div class="col-lg-8 playerwar">
+            <canvas id="viewport" width="640" height="600" style="margin-top: 90px"></canvas>
+           
+        </div>
+        <div class="col-lg-2" id="player2">
+           <h1>PLAYER 2</h1>
+            <img src="img/buttle/images.jpg">
+           <h3>Жизнь:</h3><input id="lifePlayer2" value="100">
+           <h3>Защита</h3><input id="defancePlayer2" value="1">
+           <h3>Количество <input class="countPlayer2" value="10"></h3>
+           <h3>Атака: <input class="attackPlayer2" value="100"></h3>
+            <h5 style="color:red">Магия земли:</h5><input style="text-align: center; width: 20px; height: 20px;" disabled="" value="0" id="greenmannaAI">
+            <button id="greenbutP2">EARTH</button>
+            <h5 style="color:red">Магия воды:</h5><input style="text-align: center; width: 20px; height: 20px;" disabled="" value="0" id="blumannaAI">
+            <button id="bluebutP2">Water</button>
+            <h5 style="color:red">Магия огня:</h5><input style="text-align: center; width: 20px; height: 20px;" disabled="" value="0" id="redmannaAI">
+            <button id="redbutP2">FIRE</button>
+            <h5 style="color:red">Магия воздуха:</h5><input style="text-align: center; width: 20px; height: 20px;" disabled="" value="0" id="whitemannaAI">
+            <button id="whitebutP2">AIR</button>
+            <h5>Магия астрала:</h5><input style="text-align: center; width: 20px; height: 20px;" disabled="" value="0" id="astralmannaAI">
+            <button id="astralbutP2">ASTRAL</button>
+            <h5>Магия смерти:</h5><input style="text-align: center; width: 20px; height: 20px;" disabled="" value="0" id="deathmannaAI">
+            <button id="deathbutP2">DEATH</button>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,69 @@
+<?php
+$listtournament = $this->listtournament;
+$idtournament = $this->idtournament;
+//var_dump($idtournament);
+//exit();
+?>
+
+<div class="container">
+    <h5 style="text-align: center"><b>Список турниров</b></h5>
+    <h5 style="text-align: center">На турнир можно зарегестрироваться <b>не раньше чем за 20мин </b> и <b>не позже чем за 5 мин </b> до начала турнира</h5>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="text-align: center"> № турнира</th>
+                    <th style="text-align: center"> Дата и время начала турнира</th>
+                    <th style="text-align: center"> Название турнира</th>
+                    <th style="text-align: center"> Максимальное количество игроков</th>
+                    <th style="text-align: center"> Призовой фонд</th>
+                    <th style="text-align: center"> Стоимость входа</th>
+                    <th style="text-align: center"> Регистрация</th>
+                    <th style="text-align: center"> Отмена регистрации</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $z = 0;
+                for ($i = 0; $i < count($listtournament); $i++) {
+                    ?>
+                    <tr>
+                        <td style="text-align: center"><?= $listtournament[$i]['idlisttournament']; ?></td>
+                        <td style="text-align: center"><?= $listtournament[$i]['datelisttournament']; ?></td>
+                        <td style="text-align: center"><?= $listtournament[$i]['nametournament']; ?></td>
+                        <td style="text-align: center"><?= $listtournament[$i]['maxcountlisttournament']; ?></td>
+                        <td style="text-align: center"><?= $listtournament[$i]['prizefund']; ?></td>
+                        <td style="text-align: center"><?= $listtournament[$i]['costofregistration']; ?></td>
+                        <?php
+                        if (isset($idtournament[$z])) {
+                            if ($idtournament[$z] === $listtournament[$i]['idlisttournament']) {
+                                ?> 
+                                <td style="text-align: center"> <button class="btn btn-primary regTournament" type="button" disabled="">Подать заявку</button>
+                                    <td style="text-align: center"><button class="btn btn-primary unregisterTournament" type="button" data-untournamentid-bar="<?= $listtournament[$i]['idlisttournament'] ?>"
+                                                                           data-costtotournament-bar="<?= $listtournament[$i]['costofregistration'] ?>">Снять заявку</button></td>
+                                    <?php
+                                    $z++;
+                                } else {
+                                    ?><td style="text-align: center"><button class="btn btn-primary regTournament" type="button" data-tournamentid-bar="<?= $listtournament[$i]['idlisttournament'] ?>" 
+                                                                       data-tournamenttime-bar="<?= $listtournament[$i]['datelisttournament'] ?>" 
+                                                                       data-costtotournament-bar="<?= $listtournament[$i]['costofregistration'] ?>">Подать заявку</button></td> <?php } ?>
+                                <?php
+                            } else {
+                                $z = 0;
+                                ?> <td style="text-align: center"><button class="btn btn-primary regTournament" type="button" data-tournamentid-bar="<?= $listtournament[$i]['idlisttournament'] ?>" 
+                                                                   data-tournamenttime-bar="<?= $listtournament[$i]['datelisttournament'] ?>" 
+                                                                   data-costtotournament-bar="<?= $listtournament[$i]['costofregistration'] ?>">Подать заявку</button></td> <?php }
+                            ?>
+                        
+                    </tr>
+                <?php }
+                ?>
+
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/js/tournament.js?time=<?php echo time(); ?>"></script>
