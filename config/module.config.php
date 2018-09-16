@@ -1,24 +1,29 @@
 <?php
-namespace ZendSkeletonModule;
+namespace Game;
 
 use Zend\ServiceManager\Factory\InvokableFactory;
-
+use Zend\Router\Http\Literal;
+use Zend\Router\Http\Segment;
+ 
 return [
     'controllers' => [
         'factories' => [
-            Controller\SkeletonController::class => InvokableFactory::class,
+            Controller\GameController::class => InvokableFactory::class,
         ],
     ],
     'router' => [
         'routes' => [
-            'module-name-here' => [
-                'type'    => 'Literal',
+            'game' => [
+                'type'    => Segment::class,
                 'options' => [
                     // Change this to something specific to your module
-                    'route'    => '/module-specific-root',
+                    'route'    => '/game[/:action][/:id]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ],
                     'defaults' => [
-                        'controller'    => Controller\SkeletonController::class,
-                        'action'        => 'index',
+                        'controller'    => Controller\GameController::class,
+                        'action'        => 'mycastle',
                     ],
                 ],
                 'may_terminate' => true,
@@ -29,9 +34,22 @@ return [
             ],
         ],
     ],
+   
+    'session_containers' => [
+        'UserRegistration'
+    ],
+    'controllers' => [
+        'factories' => [
+        Controller\GameController::class => Controller\Factory\GameControllerFactory::class,
+            //Controller\UserController::class => Controller\Factory\UserControllerFactory::class,            
+        ],
+    ],
     'view_manager' => [
         'template_path_stack' => [
-            'ZendSkeletonModule' => __DIR__ . '/../view',
+            __DIR__ . '/../view',
         ],
+         'strategies' => [
+            'ViewJsonStrategy',
+        ],	
     ],
 ];

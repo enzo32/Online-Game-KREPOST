@@ -1,0 +1,237 @@
+<?php
+$gameThings = $this->gameThings;
+$user = $this->user;
+$warriors = $this->warriors;
+$SiegeWeapons = $this->SiegeWeapons;
+$ScrollsOfMagic = $this->ScrollsOfMagic;
+?>
+
+<ul class="nav navbar-nav">
+    <li class="active"><a href="<?= $this->url('game', ['action' => 'mycastle']) ?>">НАЗАД</a></li>
+</ul>
+<div class="parent">
+    <div class="block">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td colspan="8" align="center"><b>Воины, Оружие/доспехи, осадное оружие, свитки магии </b> (У вас <?= $user->getuMoney() ?> золота)<hr></td>
+                </tr>
+                <tr>
+                    <td colspan="8" align="center">Вы можете купить любое количество вооружения,<br>но каждый солдат будет использовать только одну вещь!<br><br></td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<ul class="nav nav-tabs">
+    <li class="active" style="width: 25%"><a data-toggle="tab" href="#warriors" style="text-align: center"><b>Воины</b></a></li>
+    <li style="width: 25%"><a data-toggle="tab" href="#arsenal" style="text-align: center"><b>Арсенал </b></a></li>
+    <li style="width: 25%"><a data-toggle="tab" href="#SiegeWeapons" style="text-align: center"><b> Осадное оружие </b></a></li>
+    <li style="width: 25%"><a data-toggle="tab" href="#Magic" style="text-align: center"><b> Свитки магии </b></a></li>
+</ul>
+
+
+
+<div class="tab-content">
+    
+    <div id="warriors" class="tab-pane fade in active">
+        <div class="container">
+            <h4 style="text-align: center">Воины</h4>
+            <hr>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th hidden>id</th>
+                            <th style="text-align: center"><b>Тип воина</b></th>
+                            <th style="text-align: center"><b>Атака</b></th>
+                            <th style="text-align: center"><b>Защита</b></th>
+                            <th style="text-align: center"><b>Жизнь</b></th>
+                            <th style="text-align: center"><b>Стоимость</b></th>
+                            <th style="text-align: center"><b>Цена продажи</b></th>
+                            <th style="text-align: center"><b>Количество</b></th>
+                            <td style="text-align: center"><b>Итого к оплате:</b></td>
+                            <th style="text-align: center"><b>Купить</b></th>
+                            <th style="text-align: center"><b>Продать</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <?php for ($i = 0; $i < count($warriors); $i++) { ?>
+                            <tr>
+                                <td hidden><?= $warriors[$i]['idwarriors'] ?></td>
+                                <td style="text-align: center"><img src="<?= $warriors[$i]['imgwarriors'] ?>" width="70" height="138"><br><?= $warriors[$i]['namewarriors'] ?></td>
+                                <td style="text-align: center"><h5><?= $warriors[$i]['attackwarriors'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $warriors[$i]['deffencewarriors'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $warriors[$i]['hplifewarriors'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $warriors[$i]['costwarriors'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $warriors[$i]['lostwarriors'] ?></h5></td>
+                                <td style="text-align: center"><input name="weap1" type="number" value="0" class="warriorsNumber" style="text-align: center; width: 40px"></td>
+                                <td style="text-align: center"><input disabled value="0" class="totalw1cost" style="text-align: center; width: 40px"> золотых</td>
+                                <td style="text-align: center"><button class="btn btn-primary  byuWarriors" type="button" data-warriors-bar="<?= $warriors[$i]['idwarriors'] ?>">Купить</button></td>
+                                <td style="text-align: center"><a class="sold_things" href="<?= $this->url('game', ['action' => 'soldwarriors', 'id' => $warriors[$i]['idwarriors']]) ?>"><button class="btn btn-danger">Продать</button></a></td>
+                            </tr>
+                        <?php } ?>
+
+                    </tbody>
+
+                </table>
+
+
+            </div>
+
+        </div>
+    </div>
+    
+    <div id="arsenal" class="tab-pane fade">
+        <div class="container">
+            <h4 style="text-align: center">Арсенал</h4>
+            <hr>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th hidden>id</th>
+                            <th style="text-align: center"><b>Тип оружия</b></th>
+                            <th style="text-align: center"><b>Атака</b></th>
+                            <th style="text-align: center"><b>Защита</b></th>
+                            <th style="text-align: center"><b>Прочность</b></th>
+                            <th style="text-align: center"><b>Стоимость</b></th>
+                            <th style="text-align: center"><b>Цена продажи</b></th>
+                            <th style="text-align: center"><b>Количество</b></th>
+                            <td style="text-align: center"><b>Итого к оплате:</b></td>
+                            <th style="text-align: center"><b>Купить</b></th>
+                            <th style="text-align: center"><b>Продать</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <?php for ($i = 0; $i < count($gameThings); $i++) { ?>
+                            <tr>
+                                <td hidden><?= $gameThings[$i]['things_id'] ?></td>
+                                <td style="text-align: center"><img src="<?= $gameThings[$i]['img_things'] ?>" width="60" height="73"><br><?= $gameThings[$i]['name_things'] ?></td>
+                                <td style="text-align: center"><h5><?= $gameThings[$i]['attack_things'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $gameThings[$i]['defence_things'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $gameThings[$i]['strength_things'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $gameThings[$i]['cost_things'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $gameThings[$i]['lost_things'] ?></h5></td>
+                                <td style="text-align: center"><input name="weap1" type="number" value="0" class="thingsNumber" style="text-align: center; width: 40px"></td>
+                                <td style="text-align: center"><input disabled value="0" class="totalw1cost" style="text-align: center; width: 40px"> золотых</td>
+                                <td style="text-align: center"><button class="btn btn-primary buyThings" type="button" data-things-bar="<?= $gameThings[$i]['things_id'] ?>">Купить</button></td>
+                                <td style="text-align: center"><a class="sold_things" href="<?= $this->url('game', ['action' => 'soldthings', 'id' => $gameThings[$i]['things_id']]) ?>"><button class="btn btn-danger">Продать</button></a></td>
+                            </tr>
+                        <?php } ?>
+
+                    </tbody>
+
+                </table>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    
+    
+    <div id="SiegeWeapons" class="tab-pane fade">
+        <div class="container">
+            <h4 style="text-align: center">Осадное орежие</h4>
+            <hr>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th hidden>id</th>
+                            <th style="text-align: center"><b>Тип осадного оружия</b></th>
+                            <th style="text-align: center"><b>Атака</b></th>
+                            <th style="text-align: center"><b>Защита</b></th>
+                            <th style="text-align: center"><b>Стоимость</b></th>
+                            <th style="text-align: center"><b>Цена продажи</b></th>
+                            <th style="text-align: center"><b>Количество</b></th>
+                            <td style="text-align: center"><b>Итого к оплате:</b></td>
+                            <th style="text-align: center"><b>Купить</b></th>
+                            <th style="text-align: center"><b>Продать</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <?php for ($i = 0; $i < count($SiegeWeapons); $i++) { ?>
+                            <tr>
+                                <td hidden><?= $SiegeWeapons[$i]['idSiegeWeapons'] ?></td>
+                                <td style="text-align: center"><img src="<?= $SiegeWeapons[$i]['ImgSiegeWeapons'] ?>" width="60" height="73"><br><?= $SiegeWeapons[$i]['NameSiegeWeapons'] ?></td>
+                                <td style="text-align: center"><h5><?= $SiegeWeapons[$i]['AttackSiegeWeapons'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $SiegeWeapons[$i]['DeffenceSiegeWeapons'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $SiegeWeapons[$i]['CostSiegeWeapons'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $SiegeWeapons[$i]['LostSiegeWeapons'] ?></h5></td>
+                                <td style="text-align: center"><input name="weap1" type="number" value="0" class="SiegeWeaponsNumber" style="text-align: center; width: 40px"></td>
+                                <td style="text-align: center"><input disabled value="0" class="totalw1cost" style="text-align: center; width: 40px"> золотых</td>
+                                <td style="text-align: center"><button class="btn btn-primary buySiegeWeapons" type="button" data-siegeweapons-bar="<?= $SiegeWeapons[$i]['idSiegeWeapons'] ?>">Купить</button></td>
+                                <td style="text-align: center"><a class="sold_things" href="<?= $this->url('game', ['action' => 'soldsiegeweapons', 'id' => $SiegeWeapons[$i]['idSiegeWeapons']]) ?>"><button class="btn btn-danger">Продать</button></a></td>
+                            </tr>
+                        <?php } ?>
+
+                    </tbody>
+
+                </table>
+
+
+            </div>
+
+        </div>
+    </div>
+ 
+    
+    
+    <div id="Magic" class="tab-pane fade">
+        <div class="container">
+            <h4 style="text-align: center">Свитки магии</h4>
+            <hr>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th hidden>id</th>
+                            <th style="text-align: center"><b>Тип свитка</b></th>
+                            <th style="text-align: center"><b>Атака</b></th>
+                            <th style="text-align: center"><b>Защита</b></th>
+                            <th style="text-align: center"><b>Стоимость MP</b></th>
+                            <th style="text-align: center"><b>Стоимость</b></th>
+                            <th style="text-align: center"><b>Цена продажи</b></th>
+                            <th style="text-align: center"><b>Количество</b></th>
+                            <td style="text-align: center"><b>Итого к оплате:</b></td>
+                            <th style="text-align: center"><b>Купить</b></th>
+                            <th style="text-align: center"><b>Продать</b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <?php for ($i = 0; $i < count($ScrollsOfMagic); $i++) { ?>
+                            <tr>
+                                <td hidden><?= $ScrollsOfMagic[$i]['idScrollsOfMagic'] ?></td>
+                                <td style="text-align: center"><img src="<?= $ScrollsOfMagic[$i]['ImgScrollsOfMagic'] ?>" width="60" height="73"><br><?= $ScrollsOfMagic[$i]['NameScrollsOfMagic'] ?></td>
+                                <td style="text-align: center"><h5><?= $ScrollsOfMagic[$i]['AttackScrollsOfMagic'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $ScrollsOfMagic[$i]['DeffenceScrollsOfMagic'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $ScrollsOfMagic[$i]['scrollsofmagicMP'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $ScrollsOfMagic[$i]['CostScrollsOfMagic'] ?></h5></td>
+                                <td style="text-align: center"><h5><?= $ScrollsOfMagic[$i]['LostScrollsOfMagic'] ?></h5></td>
+                                <td style="text-align: center"><input name="weap1" type="number" value="0" class="ScrollsOfMagicNumber" style="text-align: center; width: 40px"></td>
+                                <td style="text-align: center"><input disabled value="0" class="totalw1cost" style="text-align: center; width: 40px"> золотых</td>
+                                <td style="text-align: center"><button class="btn btn-primary buyScrollsOfMagic" type="button" data-scrollsofmagic-bar="<?= $ScrollsOfMagic[$i]['idScrollsOfMagic'] ?>">Купить</button></td>
+                                <td style="text-align: center"><a class="sold_things" href="<?= $this->url('game', ['action' => 'soldscrollsofmagic', 'id' => $ScrollsOfMagic[$i]['idScrollsOfMagic']]) ?>"><button class="btn btn-danger">Продать</button></a></td>
+                            </tr>
+                        <?php } ?>
+
+                    </tbody>
+
+                </table>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="/js/armory.js?time=<?php echo time(); ?>"></script>

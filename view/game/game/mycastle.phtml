@@ -1,0 +1,49 @@
+<?php
+$user = $this->user;
+$countWarriors = $this->countWarriors;
+$countUserSiegeWeapons = $this->countUserSiegeWeapons;
+?>
+
+<ul class="nav navbar-nav">
+    <li class="active"><a href="<?= $this->url('buttle', ['action' => 'index']) ?>">buttle</a></li>
+</ul>
+
+<ul class="nav navbar-nav">
+    <li class="active"><a href="<?= $this->url('constractmagic', ['action' => 'index']) ?>">Constractmagic</a></li>
+</ul>
+
+<hr>
+<div class="container">
+    <h5>Логин: <?= $user[0]['full_name'] ?></h5>
+    <h5> Раса:
+        <?php if ($user[0]['uRace'] == 1) { ?>
+            <img src='../images/races/1.gif' align='absmiddle'> Бессмертный
+        <?php } elseif ($user[0]['uRace'] == 2) { ?>
+            <img src='../images/races/2.gif' align='absmiddle' > Человек
+        <?php } elseif ($user[0]['uRace'] == 3) { ?>
+            <img src='../images/races/3.gif' align='absmiddle'> Гоблин
+        <?php } elseif ($user[0]['uRace'] == 4) { ?>
+            <img src='../images/races/4.gif' align='absmiddle'> Эльф
+        <?php } elseif ($user[0]['uRace'] == 5) { ?>
+            <img src='../images/races/5.gif' align='absmiddle' > Орк
+        <?php } elseif ($user[0]['uRace'] == 6) { ?>
+            <img src='<?= $this->basePath('../img/races/6.gif') ?>' align='absmiddle'> Оборотень
+        <?php } ?>
+    </h5>
+    <h5> Золото: <b><?= $user[0]['uMoney'] ?></b> </h5>
+    <h5> Общая численность жителей вашей крепости: <b> <?= $countWarriors ?></b> </h5> 
+    <h5> Количество осадного оружия: <b><?= $countUserSiegeWeapons ?></b> </h5>
+    <h5> Ваши свитки: <b>?!?!?!?!?!?!?!</b> </h5>
+    <h5> Ваш арсенал: <b>?!?!?!?!?!</b> </h5>
+    <a href="<?= $this->url('game', ['action' => 'index']) ?>"><button class="btn-default">Просмотреть</button></a>
+    <h5>Уровень: <b><?= $user[0]['uLevel'] ?></b></h5>
+    <h5>До следующего уровня:<b><?= $user[0]['uNextLevel'] ?></b></h5>
+    <h5><td align="right">Опыт:<b><?= $user[0]['uEXP'] ?></b></h5>
+
+
+
+
+
+</div>
+
+<hr>

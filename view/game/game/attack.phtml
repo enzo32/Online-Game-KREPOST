@@ -1,0 +1,503 @@
+﻿<?php
+
+$isadmin = "*";
+//include( "../includes/inc-header.php" );
+//if ( !$_GET['id'] && !$_POST['turns'] && !$_POST['id'] ) {
+//    $users_total = $db->fetch( $db->query( "SELECT count(*) FROM users" ) );
+//    $pages = ceil( $users_total[0] / 25 );
+//
+//    if ( $_GET['p'] ) {
+//        $currentpage = round( $_GET['p'] );
+//    } else {
+//        $currentpage = round( $_POST['page'] )-1;
+//    } 
+//    if ( $currentpage < 1 ) {
+//        $currentpage = 0;
+//    } 
+//    if ( $currentpage + 1 > $pages ) {
+//        $currentpage = $pages-1;
+//    } 
+//    $lmin = $currentpage * 25;
+//    $lmax = $lmin + 25;
+//
+//    if ( $_POST['find_username'] ) {
+//        $theuser = htmlentities( stripslashes( $_POST['username'] ) );
+//        $whereclause = " WHERE uLogin LIKE \"%$theuser%\"";
+//    } 
+?>
+<table width="701" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td width="13" height="13"><img src="../img/flag/flag_l_c.gif" width="13" height="13"></td>
+    <td width="675" height="13" background="../img/flag/flag_t.gif"><img src="../img/flag/flag_t.gif" width="12" height="13"></td>
+    <td width="13" height="13"><img src="../img/flag/flag_r_c.gif" width="13" height="13"></td>
+  </tr>
+  <tr>
+    <td width="13" background="../img/flag/flag_l.gif"><img src="../img/flag/flag_l.gif" width="13" height="12"></td>
+    <td height="300" valign="top" align="center" background="../img/flag/bg.gif">
+
+<br>
+<form action="attack.php" method="post">
+<table width="95%" border="0" cellpadding="2" cellspacing="2" align="center">
+<tr>
+<td align="center" width="50%"><b>Поиск по странице</b><hr></td>
+<td align="center" width="50%"><b>Поиск по логину</b><hr></td>
+</tr>
+<tr>
+<td width="50%" align="center">
+<input name="page" size="5" maxlength="10" type="number"> / <?=$pages?> <input name="find_page" value="Искать" type="submit">
+</td>
+<td width="50%" align="center">
+<input name="username" size="10" maxlength="30" type="text"> <input name="find_username" value="Искать" type="submit">
+</td>
+</tr></table></form>
+
+<?php
+$x = $currentpage * 25;
+    if ( $x < 0 ) {
+        $x = 0;
+    } 
+    $column1 .= "<b>№</b><br>";
+    $column2 .= "<b>Логин</b><br>";
+    $column3 .= "<b>Золото</b><br>";
+    $column4 .= "<b>Армия</b><br>";
+    $column5 .= "<b>Уровень</b><br>";
+    $thequery = "SELECT uID,uLogin,uRace,(uOffensiveMen+uDefensiveMen+uSpriganMen) AS uArmySize,uGold,uLevel FROM users$whereclause ORDER BY uEXP DESC LIMIT $lmin, 25";
+    $result = $db->query( $thequery );
+    while ( $themost = $db->fetch( $result ) ) {
+        $x++;
+        $column1 .= "<hr>$x<br>";
+        $column2 .= "<hr><img src='../img/attak.gif' align='absmiddle' alt='Атака'> <a href=\"profile.php?id=" . $themost['uID'] . "\">" . $themost['uLogin'] . "</a> <img src='../img/races/" . $themost['uRace'] . ".gif' align='absmiddle' alt=''>";
+        $isonline = $db->fetch( $db->query( "SELECT uID FROM users_online WHERE uTime>'$mintime15' AND uID='" . $themost['uID'] . "'" ) );
+        if ( $isonline ) {
+            $column2 .= " [Онлайн]<br>";
+        } else {
+            $column2 .= "<br>";
+        } 
+        $column3 .= "<hr>" . $themost['uGold'] . "<br>";
+        $column4 .= "<hr>" . $themost['uArmySize'] . "<br>";
+        $column5 .= "<hr>" . $themost['uLevel'] . "<br>";
+    } 
+
+    ?>
+<table width="95%" border="0" cellpadding="2" cellspacing="2" align="center">
+<tr><td align="center" colspan="2"><b>Список игроков:</b><hr></td></tr>
+<tr>
+<td align="center">
+<?php
+if ( $currentpage > 0 ) {
+?>
+<a href="attack.php?p=<?=$currentpage-1?>"><img src="../img/left.gif" alt="Предыдущая страница" width="42" height="17"></a>
+<?php
+} else {
+echo "<img src='../img/left.gif' alt='Предыдущая страница' width='42' height='17'><hr>";
+} 
+?>
+</td>
+<td align="center">
+<?php
+if ( $currentpage + 1 < $pages ) {
+?>
+<a href="attack.php?p=<?=$currentpage + 1?>"><img src="../img/right.gif" alt="Следущая страница" width="42" height="17"></a>
+<?php
+} else {
+echo "<img src='../img/right.gif' alt='Следущая страница' width='42' height='17'><hr>";
+} 
+?>
+
+</td></tr>
+<tr><td colspan="2">
+
+<table width="100%" border="0">
+<tr>
+<td width="10%" align="center"><?=$column1?></td>
+<td width="35%"><?=$column2?></td>
+<td width="25%" align="center"><?=$column3?></td>
+<td width="20%" align="center"><?=$column4?></td>
+<td width="10%" align="center"><?=$column5?></td>
+</tr>
+</table>
+
+</td></tr>
+<tr><td align="center"><hr>
+<?php
+if ( $currentpage > 0 ) {
+?>
+<a href="attack.php?p=<?=$currentpage-1?>"><img src="../img/left.gif" alt="Предыдущая страница" width="42" height="17"></a>
+<?php
+} else {
+echo "<img src='../img/left.gif' alt='Предыдущая страница' width='42' height='17'>";
+} 
+?>
+</td>
+<td align="center"><hr>
+<?php
+if ( $currentpage + 1 < $pages ) {
+?>
+<a href="attack.php?p=<?=$currentpage + 1?>"><img src="../img/right.gif" alt="Следущая страница" width="42" height="17"></a>
+<?php
+} else {
+echo "<img src='../img/right.gif' alt='Следущая страница' width='42' height='17'>";
+} 
+?>
+</td></tr></table>
+<br>
+</td>
+    <td width="13" background="../img/flag/flag_r.gif"><img src="../img/flag/flag_r.gif" width="13" height="12"></td>
+  </tr>
+  <tr>
+    <td colspan="3" width="701" height="24"><img src="../img/flag/flag_bot.gif" width="701" height="24"></td>
+  </tr>
+</table>
+
+</td>
+    <td background="../img/ramka/border_v.gif"><img src="../img/null.gif"></td>
+  </tr>
+  <tr>
+    <td width="10" height="10"><img src="../img/ramka/ug_b_l.gif" width="10" height="10"></td>
+    <td background="../img/ramka/border.gif" colspan="3"><img src="../img/ramka/border.gif"></td>
+    <td width="10" height="10"><img src="../img/ramka/ug_b_r.gif" width="10" height="10"></td>
+  </tr>
+</table>
+
+<?php
+//} elseif ( $_GET['id'] ) {
+//    $theid = round( $_GET['id'] );
+//    $result = $db->query( "SELECT uID,uLogin FROM users WHERE uID=\"$theid\"" );
+//    $enemy = $db->fetch( $result );
+
+    ?>
+
+<table width="701" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td width="13" height="13"><img src="../img/flag/flag_l_c.gif" width="13" height="13"></td>
+    <td width="675" height="13" background="../img/flag/flag_t.gif"><img src="../img/flag/flag_t.gif" width="12" height="13"></td>
+    <td width="13" height="13"><img src="../img/flag/flag_r_c.gif" width="13" height="13"></td>
+  </tr>
+  <tr>
+    <td width="13" background="../img/flag/flag_l.gif"><img src="../img/flag/flag_l.gif" width="13" height="12"></td>
+    <td height="300" valign="top" align="center" background="../img/flag/bg.gif">
+
+<br>
+<table width="95%" border="0" cellpadding="2" cellspacing="2" align="center">
+<tr><td align="center" colspan="2"><b>Атаковать</b><hr></td></tr>
+<tr><td align="center">
+<?php
+    if ( !$enemy ) {
+        echo "Пользователь в базе не найден.";
+    } elseif ( $enemy['uID'] == $user['uID'] ) {
+        echo "Не возможно атаковать самого себя.";
+    } else {
+        echo "<form action=\"attack.php\" method=\"post\">";
+        echo "<br>У вас " . $user['uAttackTurns'] . " ходов (атак).<br>Вы собираетесь атаковать крепость игрока " . $enemy['uLogin'] . ".<br>";
+        echo "<font color='#008000'>(За одну атаку можно использовать только один Свиток)</font><br><br>";
+        echo "<input name=\"id\" type=\"hidden\" value=\"" . $enemy['uID'] . "\">";
+        echo "<select size='1' name='mag'>
+	<option value='1'>Огненная буря</option>
+	<option value='2'>Клинок Этернне</option>
+	<option value='3'>Синий кланок</option>
+	<option value='4'>Магический Яд</option>
+	<option value='5'>Ледяной Заслон</option>
+	<option value='6'>Стена из Света</option>
+	<option value='7' selected>Не использовать Свитки</option>
+	</select>";
+		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+        echo "<input name=\"turns\" type=\"text\" size=\"5\" maxlength=\"$theid\"> / " . $SETTINGS['max_atk_turns'] . " ";
+        echo "<input name=\"attack\" type=\"submit\" value=\"Атака!\"><br>";
+        echo "</form>";
+    } 
+
+    ?>
+</td></tr>
+<tr><td align="center"><hr><img src="../img/victory.gif" width="133" height="129" alt="Атака!"><br><br></td></tr>
+</table>
+
+</td>
+    <td width="13" background="../img/flag/flag_r.gif"><img src="../img/flag/flag_r.gif" width="13" height="12"></td>
+  </tr>
+  <tr>
+    <td colspan="3" width="701" height="24"><img src="../img/flag/flag_bot.gif" width="701" height="24"></td>
+  </tr>
+</table>
+
+</td>
+    <td background="../img/ramka/border_v.gif"><img src="../img/null.gif"></td>
+  </tr>
+  <tr>
+    <td width="10" height="10"><img src="../img/ramka/ug_b_l.gif" width="10" height="10"></td>
+    <td background="../img/ramka/border.gif" colspan="3"><img src="../img/ramka/border.gif"></td>
+    <td width="10" height="10"><img src="../img/ramka/ug_b_r.gif" width="10" height="10"></td>
+  </tr>
+</table>
+
+	<?php
+//} elseif ( $_POST['turns'] && $_POST['id'] ) {
+//    $turns = round( str_replace( "-", "", $_POST['turns'] ) );
+//    $theid = round( $_POST['id'] );
+//    $result = $db->query( "SELECT * FROM users WHERE uID=\"$theid\"" );
+//    $enemy = $db->fetch( $result );
+
+    ?>
+<table width="701" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td width="13" height="13"><img src="../img/flag/flag_l_c.gif" width="13" height="13"></td>
+    <td width="675" height="13" background="../img/flag/flag_t.gif"><img src="../img/flag/flag_t.gif" width="12" height="13"></td>
+    <td width="13" height="13"><img src="../img/flag/flag_r_c.gif" width="13" height="13"></td>
+  </tr>
+  <tr>
+    <td width="13" background="../img/flag/flag_l.gif"><img src="../img/flag/flag_l.gif" width="13" height="12"></td>
+    <td height="300" valign="top" align="center" background="../img/flag/bg.gif">
+
+<br>
+<table width="95%" border="0" cellpadding="2" cellspacing="2" align="center">
+<tr><td align="center" colspan="2"><b>Атаковать</b><hr></td></tr>
+<tr><td align="center">
+
+	
+<?php
+
+	
+///Урон от свитков
+$mag = round( str_replace( "-", "", $_POST['mag'] ) );
+if ($mag == 1  &&  $user['uMagFireStorm'] >= 1) 
+{
+$mag_offense=0.02*250*($user['uOffensiveMen']+$user['uSpriganMen']);
+$db->query( "UPDATE users SET uMagFireStorm=uMagFireStorm-1 WHERE uID='" . $user['uID'] . "'" );
+
+}
+if ($mag == 1  &&  $user['uMagFireStorm'] <= 1) 
+{
+echo 'У вас нет Свитков "Огненная Буря"!!!<br><br>';
+}
+
+if ($mag == 2  &&  $user['uMagAternneStil'] >= 1) 
+{
+$mag_offense=0.03*250*($user['uOffensiveMen']+$user['uSpriganMen']);
+$db->query( "UPDATE users SET uMagAternneStil=uMagAternneStil-1 WHERE uID='" . $user['uID'] . "'" );
+
+}
+if ($mag == 2  &&  $user['uMagAternneStil'] <= 1) 
+{
+echo 'У вас нет Свитков "Клинок Этернне"!!!<br><br>';
+}
+
+
+if ($mag == 3  &&  $user['uMagBlueLight'] >= 1) 
+{
+$mag_offense=0.09*250*($user['uOffensiveMen']+$user['uSpriganMen']);
+$db->query( "UPDATE users SET uMagBlueLight=uMagBlueLight-1 WHERE uID='" . $user['uID'] . "'" );
+
+}
+if ($mag == 3  &&  $user['uMagBlueLight'] <= 1)
+{
+echo 'У вас нет Свитков "Синий кланок"!!!<br><br>';
+}
+
+
+if ($mag == 4  &&  $user['uMagMagicRogue'] >= 1) 
+{
+$mag_offense=0.12*250*($user['uOffensiveMen']+$user['uSpriganMen']);
+$db->query( "UPDATE users SET uMagMagicRogue=uMagMagicRogue-1 WHERE uID='" . $user['uID'] . "'" );
+
+}
+if ($mag == 4  &&  $user['uMagMagicRogue'] <= 1)
+{
+echo 'У вас нет Свитков "Магический Яд"!!!<br><br>';
+}
+
+
+if ($mag == 5  &&  $user['uMagIceWall'] >= 1) 
+{
+$mag_offense=0.14*250*$enemy['uOffensiveMen']+$user['uSpriganMen'];
+$db->query( "UPDATE users SET uMagIceWall=uMagIceWall-1 WHERE uID='" . $user['uID'] . "'" );
+
+}
+if ($mag == 5  &&  $user['uMagIceWall'] <= 1) 
+{
+echo 'У вас нет Свитков "Ледяной Заслон"!!!<br><br>';
+}
+
+
+if ($mag == 6  &&  $user['uMagLiteWall'] >= 1) 
+{
+$mag_offense=0.18*250*$enemy['uOffensiveMen']+$user['uSpriganMen'];
+$db->query( "UPDATE users SET uMagLiteWall=uMagLiteWall-1 WHERE uID='" . $user['uID'] . "'" );
+
+}
+if ($mag == 6  &&  $user['uMagLiteWall'] <= 1) 
+{
+echo 'У вас нет Свитков "Стена из Света"!!!<br><br>';
+}
+
+
+
+
+    $timeminus24 = time() - ( 60 * 60 * 24 );
+    $query = "SELECT count(*) FROM logs WHERE lOther='" . $enemy['uID'] . "' AND lYou='" . $user['uID'] . "' AND lType='2' AND lTime2>'$timeminus24'";
+    $timesbattled = $db->fetch( $db->query( $query ) );
+    if ( !$enemy ) {
+        echo "Пользователь в базе не найден.";
+    } elseif ( $enemy['uID'] == $user['uID'] ) {
+        echo "Не возможно атаковать самого себя.";
+    } elseif ( $turns < 1 || $turns > $SETTINGS['max_atk_turns'] ) {
+        echo "Введите правильно количество ходов (атак)";
+    } elseif ( $turns > $user['uAttackTurns'] ) {
+        echo "У вас не достаточно ходов (атак)";
+    } elseif ( $enemy['uLevel'] < $user['uLevel'] - $SETTINGS['lvls_below'] ) {
+        echo "Не возможно атаковать игрока, который на " . $SETTINGS['lvls_below'] . " уровней ниже вас.";
+    } elseif ( $enemy['uLevel'] > $user['uLevel'] + $SETTINGS['lvls_above'] ) {
+        echo "Не возможно атаковать игрока, который на " . $SETTINGS['lvls_above'] . " уровней высше вас.";
+    } elseif ( $timesbattled[0] >= $SETTINGS['attacks_24'] ) {
+        echo "Не возможно атаковать одного игрока больше чем " . $SETTINGS['attacks_24'] . " раз за 24 часа.";
+    } else {
+        $weaponz1 = explode( ";", $user['uWeapon1'] . ";" . $user['uWeapon2'] . ";" . $user['uWeapon3'] . ";" . $user['uWeapon4'] . ";" . $user['uWeapon5'] );
+        $weaponz2 = explode( ";", $SETTINGS['wp_1_dmg'] . ";" . $SETTINGS['wp_2_dmg'] . ";" . $SETTINGS['wp_3_dmg'] . ";" . $SETTINGS['wp_4_dmg'] . ";" . $SETTINGS['wp_5_dmg'] );
+        $menleft = $user['uOffensiveMen']+$user['uSpriganMen'];
+        $offense = $user['uOffense'] + ( $menleft * 250 ) + $mag_offense;
+        $x = 0;
+        while ( $x < 5 && $menleft != 0 ) {
+            if ( $weaponz1[$x] >= $menleft ) {
+                $offense = $offense + ( $menleft * $weaponz2[$x] );
+                $menleft = 0;
+            } else {
+                $offense = $offense + ( $weaponz1[$x] * $weaponz2[$x] );
+                $menleft = $menleft - $weaponz1[$x];
+            } 
+            $x++;
+        } 
+        /////Урон защиты от строений$dif1 = 50000;
+$dif2 = 100000;
+$dif3 = 25000;
+$dif4 = 500000;
+
+if ($enemy['uCastleBalisti'] == 1) 
+{
+$castle_defens = 0.01*($enemy['uDefensiveMen']);
+}
+elseif ($enemy['uCastleBalisti'] == 2) 
+{
+$castle_defens = 0.03*($enemy['uDefensiveMen']);
+}
+
+if ($enemy['uCastleWoodGate'] == 1) 
+{
+$castle_defens = $castle_defens + 0.01*$enemy['uSpriganMen'];
+}
+////Котлы с кипящей смолой 
+
+
+if ($enemy['uCastleRovSvodoi'] == 1) 
+{
+$castle_defens=$castle_defens + 0.04*$enemy['uSpriganMen'];
+}
+
+if ($enemy['uCastleMagCastle'] == 1) 
+{
+$castle_defens=$castle_defens + 0.1*($enemy['uDefensiveMen']+$enemy['uSpriganMen']);
+}
+        $armourz1 = explode( ";", $enemy['uArmour1'] . ";" . $enemy['uArmour2'] . ";" . $enemy['uArmour3'] . ";" . $enemy['uArmour4'] . ";" . $enemy['uArmour5'] );
+        $armourz2 = explode( ";", $SETTINGS['ar_1_dmg'] . ";" . $SETTINGS['ar_2_dmg'] . ";" . $SETTINGS['ar_3_dmg'] . ";" . $SETTINGS['ar_4_dmg'] . ";" . $SETTINGS['ar_5_dmg'] );
+        $menleft = $enemy['uDefensiveMen']+$enemy['uSpriganMen'];
+        $defense = $enemy['uDefense'] + ( $menleft * 250 ) + ($castle_defens*250);
+        $x = 0;
+        while ( $x < 5 && $menleft != 0 ) {
+            if ( $armourz1[$x] >= $menleft ) {
+                $defense = $defense + ( $menleft * $armourz2[$x] );
+                $menleft = 0;
+            } else {
+                $defense = $defense + ( $armourz1[$x] * $armourz2[$x] );
+                $menleft = $menleft - $armourz1[$x];
+            } 
+            $x++;
+        } 
+
+        if ( $offense == $defense ) {
+            if ( rand( 1, 2 ) == 1 ) {
+                $offense += 50 * rand( 1, 6 );
+            } else {
+                $offense += 50 * rand( 1, 6 );
+            } 
+        } 
+
+        echo "<br>Ваши ".$user['uOffensiveMen']." Мечников и ".$user['uSpriganMen']." Лучников нанесли $offense урона.<br><br>";
+        echo "Стражники и Лучники игркока " .$enemy['uLogin'] . " смогли отбить $defense урона.<br><br> У игрока построены следующие укрепления:<br><br><b> ";
+        if (  $enemy['uCastleSpriganPlace'] == 1){echo'- Площадка для лучников<br><br>';}
+        if (  $enemy['uCastleBalisti'] == 1){echo'- Настенные балисты<br><br>';}
+        if (  $enemy['uCastleBalisti'] == 2){echo'- Настенные катапульты<br><br>';}
+        if (  $enemy['uCastleWoodGate'] == 1){echo'- Сосновые ворота<br><br>';}
+        if (  $enemy['uCastleGatePost'] == 1){echo'- Надвратный пост стражи<br><br>';}
+        if (  $enemy['uCastleBrege'] == 1){echo'- Котлы с кипящей смолой<br><br>';}
+        if (  $enemy['uCastleRovSvodoi'] == 1){echo'- Ров с водой<br><br>';}
+        if (  $enemy['uCastleMagCastle'] == 1){echo'- Сторожевая башня мага<br><br>';}
+        if (  $enemy['uCastleTimber'] == 1){echo'- Деревянный частокол<br><br>';}
+        if (  $enemy['uCastleTimber'] == 2){echo'- Каменная стена с деревянной надстройкой<br><br>';}
+        if (  $enemy['uCastleTimber'] == 3){echo'- Каменная стена с каменной надстройкой';}
+        if (  $enemy['uCastleTimber'] == 0 && $enemy['uCastleMagCastle'] == 0 && $enemy['uCastleRovSvodoi'] == 0 && $enemy['uCastleBrege'] == 0 && $enemy['uCastleGatePost'] == 0 && $enemy['uCastleWoodGate'] == 0 && $enemy['uCastleBalisti'] == 0 ){echo'- Укреплений нет';}
+        echo"</b><br><br>";
+
+        $time = time();
+        if ( $offense > $defense ) {
+            $gold_gained_work = $enemy['uGold'] / 20;
+            $gold_gained = $gold_gained_work * $turns;
+            $exp_gained_work = rand( 1000, 3500 );
+            $exp_gained_work2 = $exp_gained_work / 10;
+            $exp_gained = $exp_gained_work2 * $turns;
+            echo "Вы победили игрока " . $enemy['uLogin'] . ". Вы получаете $gold_gained золота а также $exp_gained опыта.<br>";
+            $user['uEXP'] = $user['uEXP'] + $exp_gained;
+            $db->query( "UPDATE users SET uGold=uGold+'$gold_gained',uEXP=uEXP+'$exp_gained',uWon=uWon+'1',uAttackTurns=uAttackTurns-'$turns' WHERE uID='" . $user['uID'] . "'" );
+            $db->query( "UPDATE users SET uGold=uGold-'$gold_gained',uLost=uLost+'1' WHERE uID='" . $enemy['uID'] . "'" );
+            $db->query( "INSERT INTO logs (`lType`,`lWinLose`,`lYou`,`lOther`,`lOtherLogin`,`lTurns`,`lGold`,`lEXP`,`lTime`,`lTime2`) VALUES ('2', '1', '" . $user['uID'] . "', '" . $enemy['uID'] . "', '" . $enemy['uLogin'] . "', '$turns', '$gold_gained', '$exp_gained', \"$gamedate\", '$time')" );
+            $db->query( "INSERT INTO logs (`lType`,`lWinLose`,`lYou`,`lOther`,`lOtherLogin`,`lTurns`,`lGold`,`lEXP`,`lTime`,`lTime2`) VALUES ('1', '2', '" . $enemy['uID'] . "', '" . $user['uID'] . "', '" . $user['uLogin'] . "', '$turns', '-$gold_gained', '0', \"$gamedate\", '$time')" );
+            if ( $user['uEXP'] > $user['uNextLevel'] ) {
+                $at = $user['uNextLevel'] / 2;
+                $add = $user['uNextLevel'] + $at;
+                echo "<br>Вы перешли на новый уровень.<br>";
+                $db->query( "UPDATE users SET uLevel=uLevel+'1',uNextLevel=uNextLevel+'$add' WHERE uID='" . $user['uID'] . "'" );
+            } 
+        } elseif ( $offense < $defense ) {
+            $gold_lost_work = $user['uGold'] / 40;
+            $gold_lost = $gold_lost_work * $turns;
+            $exp_gained_work = rand( 1000, 3500 );
+            $exp_gained_work2 = $exp_gained_work / 20;
+            $exp_gained = $exp_gained_work2 * $turns;
+            echo $enemy['uLogin'] . " победил вас. Вы потеряли $gold_lost золота.<br>";
+            $enemy['uEXP'] = $enemy['uEXP'] + $exp_gained;
+            $db->query( "UPDATE users SET uGold=uGold-'$gold_lost',uLost=uLost+'1',uAttackTurns=uAttackTurns-'$turns' WHERE uID='" . $user['uID'] . "'" );
+            $db->query( "UPDATE users SET uGold=uGold+'$gold_lost',uWon=uWon+'1',uEXP=uEXP+'$exp_gained' WHERE uID='" . $enemy['uID'] . "'" );
+            $db->query( "INSERT INTO logs (`lType`,`lWinLose`,`lYou`,`lOther`,`lOtherLogin`,`lTurns`,`lGold`,`lEXP`,`lTime`,`lTime2`) VALUES ('2', '2', '" . $user['uID'] . "', '" . $enemy['uID'] . "', '" . $enemy['uLogin'] . "', '$turns', '-$gold_lost', '0', \"$gamedate\", '$time')" );
+            $db->query( "INSERT INTO logs (`lType`,`lWinLose`,`lYou`,`lOther`,`lOtherLogin`,`lTurns`,`lGold`,`lEXP`,`lTime`,`lTime2`) VALUES ('1', '1', '" . $enemy['uID'] . "', '" . $user['uID'] . "', '" . $user['uLogin'] . "', '$turns', '$gold_lost', '$exp_gained', \"$gamedate\", '$time')" );
+            if ( $enemy['uEXP'] > $enemy['uNextLevel'] ) {
+                $at = $enemy['uNextLevel'] / 2;
+                $add = $enemy['uNextLevel'] + $at;
+                echo "<br>" . $enemy['uLogin'] . " переходит на новый уровень.<br>";
+                $db->query( "UPDATE users SET uLevel=uLevel+'1',uNextLevel=uNextLevel+'$add' WHERE uID='" . $enemy['uID'] . "'" );
+            } 
+        } 
+        echo "<br>";
+    } 
+
+?>
+</td></tr>
+<tr><td align="center"><hr><img src="../img/victory.gif" width="133" height="129" alt="Атака!"><br><br></td></tr>
+</table>
+</td>
+    <td width="13" background="../img/flag/flag_r.gif"><img src="../img/flag/flag_r.gif" width="13" height="12"></td>
+  </tr>
+  <tr>
+    <td colspan="3" width="701" height="24"><img src="../img/flag/flag_bot.gif" width="701" height="24"></td>
+  </tr>
+</table>
+
+
+</td>
+    <td background="../img/ramka/border_v.gif"><img src="../img/null.gif"></td>
+  </tr>
+  <tr>
+    <td width="10" height="10"><img src="../img/ramka/ug_b_l.gif" width="10" height="10"></td>
+    <td background="../img/ramka/border.gif" colspan="3"><img src="../img/ramka/border.gif"></td>
+    <td width="10" height="10"><img src="../img/ramka/ug_b_r.gif" width="10" height="10"></td>
+  </tr>
+</table>
+
+<?php
+//} 
+?>
